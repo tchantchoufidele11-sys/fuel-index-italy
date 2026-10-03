@@ -1,0 +1,71 @@
+name: Index carburant Italie (MIMIT)
+
+on:
+  schedule:
+    - cron: '17 */3 * * *'     # toutes les 3 h ; l'heure de mise en ligne MIMIT n'est pas documentee
+  workflow_dispatch: {}
+
+permissions:
+  contents: write              # publication sur la branche gh-pages
+
+concurrency:
+  group: italy-fuel-index
+  cancel-in-progress: false    # jamais deux publications en parallele
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Tests (fixture reelle du 2026-10-01, sans reseau)
+        run: node --test "test/*.test.mjs"
+
+      - name: Recuperer l'index publie (branche gh-pages)
+        run: |
+          git config user.name  "fuel-index-bot"
+          git config user.email "fuel-index-bot@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null 2>&1; then
+            git fetch origin gh-pages
+            git worktree add site origin/gh-pages
+            (cd site && git checkout -B gh-pages origin/gh-pages)
+          else
+            git worktree add --detach site
+            (cd site && git checkout --orphan gh-pages && git rm -rf --quiet . && touch .nojekyll)
+          fi
+
+      - name: Construire l'index (echec ferme)
+        id: build
+        run: |
+          set +e
+          node scripts/fetch-and-build.mjs --out site --reports reports
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          exit $code
+
+      - name: Publier si l'index a change
+        if: steps.build.outputs.code == '0'
+        run: |
+          cd site
+          touch .nojekyll
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Aucun changement (extraction deja publiee)."
+          else
+            git commit -m "Index carburant Italie : $(node -e "console.log(require('./it/v1/manifest.json').extraction)")"
+            git push origin gh-pages
+          fi
+
+      - name: Conserver les rapports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapports-${{ github.run_id }}
+          path: reports/
+          if-no-files-found: ignore
+          retention-days: 90

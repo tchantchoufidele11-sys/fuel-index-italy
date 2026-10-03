@@ -1,0 +1,10 @@
+{
+  "name": "fuel-index-italy",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "build": "node scripts/fetch-and-build.mjs"
+  }
+}
