@@ -4,7 +4,8 @@
 // (Remplace la regle IT-1 de la mediane de commune a 25 km : faux rejets d'iles et angle mort des petites communes.)
 import { candidatesFor, outsideProvince, PROVINCE_BUFFER_KM, SARDINIA_SIGLE } from './province-boundaries.mjs';
 
-// Les 107 sigles du MIMIT (fixture du 2026-10-01, liste derivee a recouper officiellement)
+// 111 sigles acceptes, dont 107 observes sur la fixture de reference du 2026-10-01 : les 110 unites du fichier ISTAT
+// 2026 + SU (Sud Sardegna, nomenclature MIMIT de 2016). CI, OG, OT et VS sont acceptes sans etre observes.
 export const MIMIT_PROVINCES = Object.freeze(new Set(
   ('AG AL AN AO AP AQ AR AT AV BA BG BI BL BN BO BR BS BT BZ CA CB CE CH CL CN CO CR CS CT CZ EN FC FE FG FI FM FR GE GO GR ' +
    'IM IS KR LC LE LI LO LT LU MB MC ME MI MN MO MS MT NA NO NU OR PA PC PD PE PG PI PN PO PR PT PU PV PZ RA RC RE RG RI RM ' +

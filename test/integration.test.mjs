@@ -15,7 +15,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 // Empreinte fonctionnelle de reference = celle de la sortie REELLEMENT publiee par le script (inputs compris).
-const REFERENCE_FINGERPRINT = 'ec927f56a870c54cb9dabee2a1eabd00143e855f76bb613fca15d24e92faf4fb';   // IT-1b (IT-1 : 4cd0b2b0…414f)
+const REFERENCE_FINGERPRINT = '377a6ca394af0772fefbf9dc5ee99ee56042a87dde87fab45d6378d939c623e4';   // IT-1b, attribution IODL definitive du 2026-10-03 (avant : ec927f56…faf4fb ; IT-1 : 4cd0b2b0…414f)
 
 const BUILD_URL = new URL('../src/build-index.mjs', import.meta.url).href;
 const SCRIPT_URL = new URL('../scripts/fetch-and-build.mjs', import.meta.url).href;

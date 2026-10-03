@@ -4,7 +4,7 @@ import { evaluateGuards, GUARDS } from '../src/manifest.mjs';
 import { buildIndex } from '../src/build-index.mjs';
 import { fixtures, builtFixture, previousManifest, limits } from './helpers.mjs';
 
-const okCounts = () => ({ stationsValid: 23753, retainedByFuel: { sp95: 20018, diesel: 20022, gpl: 4518 }, keys: 45284, conflicts: 0 });
+const okCounts = () => ({ stationsValid: 23793, retainedByFuel: { sp95: 20045, diesel: 20049, gpl: 4523 }, keys: 45284, conflicts: 0 });   // references IT-1b
 
 test('seuils de la specification : 20 000 stations, 15 000 / 15 000 / 3 500 prix, 20 % de chute, 1 % de conflits', () => {
   assert.deepEqual(GUARDS.minByFuel, { sp95: 15000, diesel: 15000, gpl: 3500 });
@@ -32,7 +32,7 @@ test('seuils aux bornes', () => {
 });
 
 test('chute par carburant par rapport au dernier index : 19 % accepte, 21 % refuse', () => {
-  const prev = { counts: { retainedByFuel: { sp95: 25000, diesel: 20022, gpl: 4518 } } };
+  const prev = { counts: { retainedByFuel: { sp95: 25000, diesel: 20049, gpl: 4523 } } };
   const c = okCounts(); c.retainedByFuel.sp95 = 20250;   // -19 %
   assert.equal(evaluateGuards(c, prev).ok, true);
   c.retainedByFuel.sp95 = 19750;                          // -21 %

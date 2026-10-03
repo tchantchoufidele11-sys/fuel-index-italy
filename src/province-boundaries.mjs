@@ -3,7 +3,8 @@ import { StructuralError } from './mimit-parser.mjs';
 
 export const PROVINCE_BUFFER_KM = 5;   // choix d'ingenierie mesure (IT-1b), pas une propriete annoncee par l'ISTAT
 export const SARDINIA_REGION_CODE = 20;
-// Sigles sardes anciens (MIMIT) et nouveaux (reforme en vigueur au 01/01/2026 ; CI dans le fichier ISTAT, SU annonce par SITUAS).
+// Sigles sardes des DEUX nomenclatures : MIMIT 2016 (CA NU OR SS SU, ou SU = Sud Sardegna) et ISTAT 2026
+// (SS OT NU OR OG VS CA CI). Aucune correspondance 1:1 : le controle se fait contre l union des unites sardes.
 export const SARDINIA_SIGLE = Object.freeze(new Set(['SS', 'NU', 'OR', 'CA', 'SU', 'OT', 'OG', 'VS', 'CI']));
 const KM_PER_DEG = 6371.0088 * Math.PI / 180;
 

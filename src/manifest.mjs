@@ -89,11 +89,13 @@ export function assertValidPreviousManifest(m) {
 }
 export const SOURCE = 'MIMIT – Osservaprezzi carburanti';
 export const LICENSE = 'IODL 2.0';
-// Texte d'attribution PROVISOIRE : point ouvert de la specification (texte exact a valider avant mise en service).
-export const ATTRIBUTION = 'Fonte: Ministero delle Imprese e del Made in Italy – Osservaprezzi carburanti (IODL 2.0)';
+// Texte d'attribution DEFINITIF (gele le 2026-10-03, apres verification de la page officielle du jeu de donnees) :
+// la IODL 2.0 demande la source, le nom du sujet qui fournit la donnee et, si possible, le lien vers la licence.
+export const ATTRIBUTION = 'Fonte: Ministero delle Imprese e del Made in Italy \u2014 Osservaprezzi carburanti \u00b7 Licenza IODL 2.0 \u00b7 http://www.dati.gov.it/iodl/2.0/';
 
-// Seuils de la specification gelee. Fixture du 2026-10-01 : 23 753 stations valides apres controle geographique
-// (20 432 indexees avec au moins un prix) ; prix retenus apres filtre geographique 20 018 / 20 022 / 4 518 ; 0 conflit.
+// Seuils de la specification gelee. References IT-1b (fixture du 2026-10-01) : 23 793 stations valides apres controle
+// geographique (20 461 indexees avec au moins un prix) ; prix retenus apres filtre geographique 20 045 / 20 049 / 4 523 ;
+// 0 conflit.
 export const GUARDS = Object.freeze({
   minStations: 20000,        // stations VALIDES apres controle geographique (pas seulement celles ayant un prix)
   minByFuel: Object.freeze({ sp95: 15000, diesel: 15000, gpl: 3500 }),

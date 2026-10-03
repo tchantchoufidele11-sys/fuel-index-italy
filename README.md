@@ -22,9 +22,17 @@ node scripts/fetch-and-build.mjs --out site --reports reports \
 
 1. Point partagé (4 décimales) par des stations de **communes différentes** (clé commune + province) → rejet.
 2. Sinon, station à **plus de 5 km à l'extérieur du polygone de sa province** ISTAT 2026 → rejet.
-3. **Sardaigne** (sigles `SS NU OR CA SU OT OG VS CI`) : contrôle contre l'**union** des unités sardes ISTAT
-   (compatibilité transitoire : le MIMIT n'a pas repris la réforme). Compteurs `geoSardiniaCompatibilityCount` et
-   `siglesSardesObserves` dans le rapport. À supprimer quand le MIMIT documentera son alignement.
+3. **Sardaigne** (sigles `SS NU OR CA SU OT OG VS CI`) : contrôle contre l'**union** des unités sardes ISTAT.
+   Compteurs `geoSardiniaCompatibilityCount` et `siglesSardesObserves` dans le rapport.
+
+**Deux nomenclatures sardes différentes, sans correspondance 1:1** (vérifié le 2026-10-03). Dans la fixture de
+référence, le MIMIT emploie encore l'organisation de 2016 — `CA`, `NU`, `OR`, `SS`, `SU` — où **`SU` = Provincia del
+Sud Sardegna**, sigle fixée par le D.P.R. 140/2017. Vérification sur les données : les 153 stations `SU` couvrent le
+Sulcis Iglesiente (Carbonia, Iglesias), le Medio Campidano (Villacidro, Guspini, Sanluri) et l'ex-Cagliari hors ville
+métropolitaine (Muravera, Isili). Le fichier ISTAT 2026 porte la nouvelle organisation en huit unités : `SS`, `OT`,
+`NU`, `OR`, `OG`, `VS`, `CA`, `CI`. **`SU` n'est donc pas un alias de Sulcis Iglesiente** : aucune correspondance 1:1
+n'est cherchée, et l'union géométrique est le seul traitement correct. `CI`, `OG`, `OT` et `VS` sont acceptés par
+avance ; `siglesSardesObserves` détectera le jour où le MIMIT adoptera la nouvelle organisation.
 
 Remplace la règle IT-1 de la médiane de commune (25 km), qui rejetait des îles (Stromboli) et ne contrôlait pas les
 communes de moins de 3 stations (Monghidoro, à 269 km de sa province, passait).
@@ -46,8 +54,7 @@ communes de moins de 3 stations (Monghidoro, à 269 km de sa province, passait).
 - `SOURCE.json` : URL, date de référence 01/01/2026, SHA-256 de l'archive et de chaque fichier, SHA-256 du GeoJSON,
   licence **CC BY 4.0**, projection source, méthode et date de conversion, mention « dérivé ». Deux notions distinctes :
   `istatSnapshotSigle` (sigles réellement présents dans le fichier : `CI` pour Sulcis Iglesiente, pas de `SU`) et
-  `magotCompatibility` (alias acceptés par Magot, dont `SU` annoncé par SITUAS/Istat le 18/06/2026). La donnée source
-  n'est jamais réécrite.
+  `magotCompatibility` (sigles acceptés par Magot, dont `SU`). La donnée source n'est jamais réécrite.
 - Le job vérifie l'empreinte du GeoJSON contre `SOURCE.json` avant usage (sinon code 2).
 - Attribution : « Confini amministrativi 2026 — Istat, CC BY 4.0. Données converties et normalisées pour Magot. »
 - Mise à jour annuelle, acte volontaire : nouvelle source → audit → `node scripts/convert-istat-provinces.mjs
@@ -82,29 +89,43 @@ Les 3 dernières extractions sont conservées.
 | SHA-256 GeoJSON des limites | `bc4e63342540eae93dd7b622759dc45fd7dd0d0fda85513ca705abd074e0d8bd` | |
 | Rejets géographiques | **134** (84 points partagés, 66 hors province, dont 16 en commun) | 174 |
 | Sardaigne en compatibilité | 674 stations (CA 147, NU 95, OR 74, SS 205, SU 153) | |
+| Sigles de provinces | **111 acceptés, dont 107 observés** (jamais observés : CI, OG, OT, VS) | |
 | Stations valides / indexées | **23 793 / 20 461** | 23 753 / 20 432 |
 | Prix retenus | SP95 **20 045** · diesel **20 049** · GPL **4 523** (dont 4 372 servis) | 20 018 / 20 022 / 4 518 |
 | Zones | **655** | 653 |
-| Empreinte fonctionnelle publiée | `ec927f56a870c54cb9dabee2a1eabd00143e855f76bb613fca15d24e92faf4fb` | `4cd0b2b0…414f` |
+| Empreinte fonctionnelle publiée | `377a6ca394af0772fefbf9dc5ee99ee56042a87dde87fab45d6378d939c623e4` (avant l'attribution définitive : `ec927f56…faf4fb`) | `4cd0b2b0…414f` |
 | Stations retenues (SP95 self, 3 j au plus) | Rome 0,88 km (16807) · Milan 0,49 km (61903) · Pienza 0,35 km (7727) | identiques |
 | Stromboli (37410) | indexée ; aucun prix valide à 40 km, retrouvée en secours (prix de 5 j) | rejetée |
 
-## Points à valider à l'audit
+## Décisions validées et points restant ouverts
 
-1. **Seuil « stations »** : appliqué aux stations **valides après contrôle géographique** (23 753), valeur donnée par la
-   spécification. L'index n'en contient que 20 432 (celles ayant au moins un prix retenu) : un seuil de 20 000 sur ce
-   nombre ne laisserait que 2 % de marge.
-2. **Chiffres de prix de la spécification** (20 130 / 20 134 / 4 534) : mesurés **avant** le filtre géographique.
-   Après filtre : 20 018 / 20 022 / 4 518. Les seuils (15 000 / 15 000 / 3 500) restent valables.
-3. **Clé de commune** = commune + province (et non le nom seul). Sans effet sur la fixture (aucun homonyme),
-   mais évite de fusionner deux communes homonymes de provinces différentes.
-4. **Liste des 107 sigles** : identique à celle observée dans la fixture ; non recoupée avec une liste officielle
-   ISTAT. Une province inconnue met la station en quarantaine (échec fermé).
-5. **Texte d'attribution** : provisoire (`src/manifest.mjs`), point ouvert de la spécification.
-6. **Heure d'été** (`Europe/Rome`, hypothèse non confirmée) : heure répétée → première occurrence ;
+Validés à l'audit (IT-1 puis IT-1b) :
+
+1. **Seuil « stations »** : appliqué aux stations **valides après lecture, quarantaine et filtres géographiques**
+   (référence IT-1b : 23 793), et non aux stations présentes dans les zones (20 461).
+2. **Références de prix** : mesurées **après** le filtre géographique (IT-1b : 20 045 / 20 049 / 4 523). Les chiffres
+   de la spécification d'origine (20 130 / 20 134 / 4 534) étaient mesurés avant filtre. Seuils : 15 000 / 15 000 / 3 500.
+3. **Clé de commune** = commune + province (et non le nom seul), pour le filtre des points partagés.
+4. **Heure d'été** (`Europe/Rome`, hypothèse non confirmée) : heure répétée → première occurrence ;
    heure inexistante → décalée vers l'avant.
-7. **Défaut corrigé avant livraison** : sous Node 22, `node --test test/` ne parcourt pas le dossier ; le motif
-   `"test/*.test.mjs"` est utilisé dans `package.json` et dans le workflow.
+5. **Test runner** : sous Node 22, `node --test test/` ne parcourt pas le dossier ; le motif `"test/*.test.mjs"` est
+   utilisé dans `package.json` et dans le workflow.
+
+Restant ouverts (bloquants pour la mise en service, pas pour le code) :
+
+- **Sigles de provinces** : **111 acceptés, dont 107 observés** sur la fixture de référence, recoupés le 2026-10-03
+  avec le fichier ISTAT 2026 versionné : les 107 sigles observés sont tous couverts, aucune station en quarantaine, et
+  les 110 unités ISTAT figurent toutes dans la liste acceptée. Province inconnue → quarantaine (échec fermé).
+- **Texte d'attribution MIMIT** : figé le 2026-10-03 (`src/manifest.mjs`), d'après la page officielle du jeu de
+  données (licence IODL 2.0, publié par le Ministero delle Imprese e del Made in Italy) :
+  « Fonte: Ministero delle Imprese e del Made in Italy — Osservaprezzi carburanti · Licenza IODL 2.0 ·
+  http://www.dati.gov.it/iodl/2.0/ ». La IODL 2.0 exige la source, le nom du fournisseur et, si possible, le lien
+  vers la licence.
+- **Fuseau de `dtComu`** : convention `Europe/Rome`, `tzConfirmed: false`. Les métadonnées officielles ne documentent
+  pas le fuseau. Preuve opérationnelle (2026-10-03) : sur la fixture, les communications du jour d'extraction s'arrêtent
+  à 08:04:33, en cohérence avec la référence « alle ore 8 » du MIMIT et difficilement compatible avec une lecture UTC
+  le 1er octobre. Inférence, pas confirmation : `tzConfirmed` ne passera à `true` que sur réponse officielle du MIMIT,
+  après audit.
 
 ## Correctifs après audit (IT-1 v2)
 
@@ -122,12 +143,12 @@ Les 3 dernières extractions sont conservées.
   1 ≤ zones ≤ stations indexées, conflits et prix ≤ clés). Sinon code 4. Avant : un manifeste à zéro neutralisait
   silencieusement le contrôle de chute.
 
-## Ancienne règle « plus de 25 km de la médiane de la commune » (IT-1, remplacée par IT-1b)
+## Historique IT-1 : règle « plus de 25 km de la médiane de la commune » (remplacée par IT-1b)
 
-Implémentée telle que gelée et conservée comme référence déterministe d'IT-1. Faux rejet connu et mesuré : 37410
+Règle d'IT-1, conservée ici à titre historique uniquement (elle n'existe plus dans le code). Faux rejet connu et mesuré : 37410
 (Stromboli, commune de Lipari ; la station SP95 exploitable suivante est à 41,67 km, hors du rayon de 40 km). Angle mort
-connu : communes de moins de 3 stations non contrôlées (ex. Monghidoro, BO, à 309 km). Traité dans IT-1b (limites
-administratives officielles, commune et province comparées), avant IT-2.
+connu : communes de moins de 3 stations non contrôlées (ex. Monghidoro, BO, à 309 km). Traité dans IT-1b (polygone
+provincial ISTAT 2026, tolérance 5 km).
 
 ## Mise en service (hors IT-1)
 

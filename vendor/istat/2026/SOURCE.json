@@ -150,8 +150,8 @@
       "SU",
       "VS"
     ],
-    "rule": "Station de sigle sarde (ancien ou nouveau) controlee contre l union des unites sardes ISTAT",
-    "note": "Sulcis Iglesiente porte le sigle CI dans le fichier ISTAT au 01/01/2026 et SU selon SITUAS/Istat (18/06/2026). La donnee source n est pas reecrite : SU est un alias de compatibilite accepte par Magot."
+    "rule": "Station de sigle sarde (nomenclature MIMIT 2016 ou ISTAT 2026) controlee contre l UNION des unites sardes ISTAT : les deux decoupages etant incompatibles, aucune correspondance 1:1 n est cherchee.",
+    "note": "MIMIT et ISTAT 2026 utilisent deux nomenclatures sardes DIFFERENTES, sans correspondance 1:1. Dans la fixture de reference, le MIMIT emploie encore l organisation de 2016 : CA, NU, OR, SS et SU, ou SU = Provincia del Sud Sardegna (sigle fixee par le D.P.R. 140/2017 ; verifie sur les donnees : les 153 stations SU couvrent le Sulcis Iglesiente, le Medio Campidano et l ex-Cagliari hors ville metropolitaine). Le fichier ISTAT 2026 porte la nouvelle organisation en huit unites (SS, OT, NU, OR, OG, VS, CA, CI). SU n est donc PAS un alias de Sulcis Iglesiente. CI, OG, OT et VS sont acceptes par avance, pour le jour ou le MIMIT adoptera la nouvelle organisation ; le compteur siglesSardesObserves du rapport le detectera. La donnee source n est jamais reecrite."
   },
   "derived": true,
   "derivation": "Shapefile UTM 32N reprojeté en WGS 84 longitude/latitude (Transverse Mercator, séries de Krüger), coordonnées arrondies à 6 décimales, anneaux classés par orientation (trous rattachés à leur contour), orientation RFC 7946, unités triées par sigle.",
