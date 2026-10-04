@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "country": "IT",
-  "extraction": "2026-10-02",
-  "snapshotAt": "2026-10-02T06:00:00.000Z",
-  "snapshotLocal": "2026-10-02T08:00:00",
-  "generatedAt": "2026-10-03T11:15:15.742Z",
+  "extraction": "2026-10-03",
+  "snapshotAt": "2026-10-03T06:00:00.000Z",
+  "snapshotLocal": "2026-10-03T08:00:00",
+  "generatedAt": "2026-10-04T12:30:44.498Z",
   "tileDeg": 0.25,
-  "dir": "2026-10-02",
+  "dir": "2026-10-03",
   "tiles": [
     "141_50",
     "142_50",
@@ -665,34 +665,34 @@
     "187_48"
   ],
   "counts": {
-    "stationsValid": 23781,
-    "stationsIndexed": 20436,
+    "stationsValid": 23780,
+    "stationsIndexed": 20459,
     "retainedByFuel": {
-      "sp95": 20023,
-      "diesel": 20028,
-      "gpl": 4512
+      "sp95": 20045,
+      "diesel": 20051,
+      "gpl": 4525
     },
     "retainedByMode": {
-      "SELF": 40202,
-      "SERVED": 4361
+      "SELF": 40247,
+      "SERVED": 4374
     },
-    "keys": 45258,
+    "keys": 45286,
     "conflicts": 0,
     "tiles": 655
   },
   "inputs": {
     "prices": {
-      "sha256": "d878e6293ae11ea5ec891635729e4bceb911df8cf31addd5bee9f9bf6083e076",
-      "bytes": 3942776
+      "sha256": "f6d54f6e361b56c258622caae8fd5e7b3cb40b25a4e0f7605e722b82e156dc70",
+      "bytes": 3943597
     },
     "stations": {
-      "sha256": "fea8b2060e6bf51e6f584a3213d62d7b9307b6bdf67792dfba0608a0ab38bf33",
-      "bytes": 3573198
+      "sha256": "3fc810bcf82e511899634e95689b2696007512189e7b5ca6417aa7a4d0a2bba4",
+      "bytes": 3573076
     }
   },
   "source": "MIMIT – Osservaprezzi carburanti",
   "license": "IODL 2.0",
-  "attribution": "Fonte: Ministero delle Imprese e del Made in Italy – Osservaprezzi carburanti (IODL 2.0)",
+  "attribution": "Fonte: Ministero delle Imprese e del Made in Italy — Osservaprezzi carburanti · Licenza IODL 2.0 · http://www.dati.gov.it/iodl/2.0/",
   "tz": {
     "dtComu": "Europe/Rome",
     "confirmed": false
