@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "country": "IT",
-  "extraction": "2026-10-13",
-  "snapshotAt": "2026-10-13T06:00:00.000Z",
-  "snapshotLocal": "2026-10-13T08:00:00",
-  "generatedAt": "2026-10-14T12:03:43.038Z",
+  "extraction": "2026-10-14",
+  "snapshotAt": "2026-10-14T06:00:00.000Z",
+  "snapshotLocal": "2026-10-14T08:00:00",
+  "generatedAt": "2026-10-15T11:40:56.893Z",
   "tileDeg": 0.25,
-  "dir": "2026-10-13",
+  "dir": "2026-10-14",
   "tiles": [
     "141_50",
     "142_50",
@@ -357,6 +357,7 @@
     "171_53",
     "171_54",
     "171_55",
+    "172_39",
     "172_42",
     "172_43",
     "172_44",
@@ -664,29 +665,29 @@
     "187_48"
   ],
   "counts": {
-    "stationsValid": 23792,
-    "stationsIndexed": 20374,
+    "stationsValid": 23789,
+    "stationsIndexed": 20358,
     "retainedByFuel": {
-      "sp95": 19953,
-      "diesel": 19962,
-      "gpl": 4528
+      "sp95": 19937,
+      "diesel": 19948,
+      "gpl": 4524
     },
     "retainedByMode": {
-      "SELF": 40070,
-      "SERVED": 4373
+      "SELF": 40039,
+      "SERVED": 4370
     },
-    "keys": 45222,
+    "keys": 45217,
     "conflicts": 0,
-    "tiles": 654
+    "tiles": 655
   },
   "inputs": {
     "prices": {
-      "sha256": "0793691a2c76ec0379539ed4ec190eac549271b45e093fa1f7a1244566fa5bec",
-      "bytes": 3936618
+      "sha256": "bf6305b647ebc6c685c8047f73afd0d1db202844d94cd2163cfc37e591e85919",
+      "bytes": 3935297
     },
     "stations": {
-      "sha256": "93cfb42286723ebef6a70f21b7868acf505a1cab1ee4d5fc1eb19052d8ad03d8",
-      "bytes": 3574120
+      "sha256": "f8ce104b9c27b3835ef872ae8519df726fc89edd556a4862fd9359326cddb153",
+      "bytes": 3573763
     }
   },
   "source": "MIMIT – Osservaprezzi carburanti",
